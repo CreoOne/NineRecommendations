@@ -1,19 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NineRecommendations.Core.Persistence;
 using NineRecommendations.Core.Questionnaires;
 using NineRecommendations.Core.Questionnaires.SingleChoice;
 using NineRecommendations.Front.Models;
 using NineRecommendations.Spotify.Questionnaries.SingleChoice;
+using System.Text;
 
 namespace NineRecommendations.Front.Controllers
 {
     public class QuestionsController : Controller
     {
-        private readonly ILogger<QuestionsController> _logger;
         private readonly IFinder finder = CreateFinder();
+        private ILogger<QuestionsController> Logger { get; }
+        private IQuestionnaireRepository QuestionnaireRepository { get; }
 
-        public QuestionsController(ILogger<QuestionsController> logger)
+        public QuestionsController(ILogger<QuestionsController> logger, IQuestionnaireRepository questionnaireRepository)
         {
-            _logger = logger;
+            Logger = logger;
+            QuestionnaireRepository = questionnaireRepository;
         }
 
         private static IFinder CreateFinder()
@@ -24,7 +28,13 @@ namespace NineRecommendations.Front.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index() => RedirectToAction(nameof(Answers), new { id = new DefaultQuestion().Id });
+        public IActionResult Index()
+        {
+            var questionnaireId = Guid.NewGuid();
+            HttpContext.Session.SetString("QuestionnaireId", questionnaireId.ToString());
+            QuestionnaireRepository.Save(new DefaultQuestionnaire(questionnaireId));
+            return RedirectToAction(nameof(Answers), new { id = new DefaultQuestion().Id });
+        }
 
         [HttpGet("{controller}/{id}")]
         public IActionResult Answers([FromRoute] Guid id)
@@ -39,7 +49,7 @@ namespace NineRecommendations.Front.Controllers
 
         [HttpPost("{controller}/{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Answers([FromRoute] Guid id, [FromForm] AnswerModel model)
+        public async Task<IActionResult> Answers([FromRoute] Guid id, [FromForm] AnswerModel model)
         {
             var question = finder.FindQuestionById(id);
 
@@ -50,6 +60,14 @@ namespace NineRecommendations.Front.Controllers
 
             if (answer == null)
                 return NotFound();
+
+            var questionnaireId = Guid.Parse(HttpContext.Session.GetString("QuestionnaireId")!);
+            var questionnaire = await QuestionnaireRepository.Load(questionnaireId);
+
+            if (questionnaire == null)
+                return RedirectToAction(nameof(Index));
+
+            questionnaire.AddAnswer(question, answer);
 
             if (answer is IPassTroughAnswer passTroughAnswer)
                 return RedirectToAction(nameof(Answers), new { id = passTroughAnswer.GetNextQuestion().Id });

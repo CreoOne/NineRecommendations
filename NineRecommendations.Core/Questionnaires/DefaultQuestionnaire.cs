@@ -2,7 +2,13 @@
 {
     public sealed class DefaultQuestionnaire : IQuestionnaire
     {
-        private readonly IDictionary<IQuestion, IAnswer> Answers = new Dictionary<IQuestion, IAnswer>();
+        private IDictionary<IQuestion, IAnswer> Answers { get; } = new Dictionary<IQuestion, IAnswer>();
+        public Guid Id { get; }
+
+        public DefaultQuestionnaire(Guid id)
+        {
+            Id = id;
+        }
 
         public void AddAnswer(IQuestion question, IAnswer answer)
         {
