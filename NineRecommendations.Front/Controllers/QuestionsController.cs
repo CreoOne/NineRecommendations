@@ -2,6 +2,7 @@
 using NineRecommendations.Core.Persistence;
 using NineRecommendations.Core.Questionnaires;
 using NineRecommendations.Core.Questionnaires.SingleChoice;
+using NineRecommendations.Front.Helpers;
 using NineRecommendations.Front.Models;
 using NineRecommendations.Spotify.Questionnaries.SingleChoice;
 using System.Text;
@@ -30,8 +31,7 @@ namespace NineRecommendations.Front.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var questionnaireId = Guid.NewGuid();
-            HttpContext.Session.SetString("QuestionnaireId", questionnaireId.ToString());
+            var questionnaireId = new QuestionnaireIdStorage(HttpContext.Session).Set();
             QuestionnaireRepository.Save(new DefaultQuestionnaire(questionnaireId));
             return RedirectToAction(nameof(Answers), new { id = new DefaultQuestion().Id });
         }
@@ -61,8 +61,12 @@ namespace NineRecommendations.Front.Controllers
             if (answer == null)
                 return NotFound();
 
-            var questionnaireId = Guid.Parse(HttpContext.Session.GetString("QuestionnaireId")!);
-            var questionnaire = await QuestionnaireRepository.Load(questionnaireId);
+            var questionnaireId = new QuestionnaireIdStorage(HttpContext.Session).Get();
+
+            if (questionnaireId == null)
+                return NotFound();
+
+            var questionnaire = await QuestionnaireRepository.Load(questionnaireId.Value);
 
             if (questionnaire == null)
                 return RedirectToAction(nameof(Index));
