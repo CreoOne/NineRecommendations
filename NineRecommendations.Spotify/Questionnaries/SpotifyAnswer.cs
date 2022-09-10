@@ -1,8 +1,7 @@
 ﻿using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Core.Questionnaires.SingleChoice;
 using NineRecommendations.Spotify.Questionnaries.SingleChoice.Activity;
 
-namespace NineRecommendations.Spotify.Questionnaries.SingleChoice
+namespace NineRecommendations.Spotify.Questionnaries
 {
     public sealed class SpotifyAnswer : IPassTroughAnswer
     {

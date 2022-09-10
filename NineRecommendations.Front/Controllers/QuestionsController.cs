@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NineRecommendations.Core.Persistence;
 using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Core.Questionnaires.SingleChoice;
 using NineRecommendations.Front.Helpers;
 using NineRecommendations.Front.Models;
-using NineRecommendations.Spotify.Questionnaries.SingleChoice;
-using System.Text;
+using NineRecommendations.Spotify.Questionnaries;
 
 namespace NineRecommendations.Front.Controllers
 {
@@ -14,11 +12,13 @@ namespace NineRecommendations.Front.Controllers
         private readonly IFinder finder = CreateFinder();
         private ILogger<QuestionsController> Logger { get; }
         private IQuestionnaireRepository QuestionnaireRepository { get; }
+        private IRecommendationRepository RecommendationRepository { get; }
 
-        public QuestionsController(ILogger<QuestionsController> logger, IQuestionnaireRepository questionnaireRepository)
+        public QuestionsController(ILogger<QuestionsController> logger, IQuestionnaireRepository questionnaireRepository, IRecommendationRepository recommendationRepository)
         {
             Logger = logger;
             QuestionnaireRepository = questionnaireRepository;
+            RecommendationRepository = recommendationRepository;
         }
 
         private static IFinder CreateFinder()
@@ -75,6 +75,12 @@ namespace NineRecommendations.Front.Controllers
 
             if (answer is IPassTroughAnswer passTroughAnswer)
                 return RedirectToAction(nameof(Answers), new { id = passTroughAnswer.GetNextQuestion().Id });
+
+            if (answer is ILastAnswer lastAnswer)
+            {
+                var recommendationJob = lastAnswer.GetRecommendation(questionnaire);
+                await RecommendationRepository.EnqueueNewRecommendationJob(recommendationJob);
+            }
 
             return NoContent();
         }

@@ -1,5 +1,6 @@
-﻿using NineRecommendations.Core.Questionnaires.SingleChoice;
+﻿using NineRecommendations.Core.Questionnaires;
 using NineRecommendations.Core.Recommendations;
+using NineRecommendations.Spotify.Recommendations;
 
 namespace NineRecommendations.Spotify.Questionnaries.SingleChoice.Time
 {
@@ -9,6 +10,6 @@ namespace NineRecommendations.Spotify.Questionnaries.SingleChoice.Time
 
         public string Content => "Timeless";
 
-        public IRecommendation GetRecommendation() => throw new NotImplementedException();
+        public IRecommendation GetRecommendation(IQuestionnaire questionnaire) => new Recommendation(Guid.NewGuid(), questionnaire);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Core.Questionnaires.SingleChoice;
 using NineRecommendations.Spotify.Questionnaries.SingleChoice.Time;
 
 namespace NineRecommendations.Spotify.Questionnaries.SingleChoice.Activity

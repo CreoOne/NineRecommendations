@@ -1,6 +1,4 @@
-﻿using NineRecommendations.Core.Questionnaires.SingleChoice;
-
-namespace NineRecommendations.Core.Questionnaires
+﻿namespace NineRecommendations.Core.Questionnaires
 {
     public sealed class DefaultFinder : IFinder
     {

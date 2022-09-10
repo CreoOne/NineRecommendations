@@ -1,4 +1,4 @@
-﻿namespace NineRecommendations.Core.Questionnaires.SingleChoice
+﻿namespace NineRecommendations.Core.Questionnaires
 {
     public interface IPassTroughAnswer : IAnswer
     {

@@ -1,7 +1,11 @@
-﻿namespace NineRecommendations.Core.Recommendations
+﻿using NineRecommendations.Core.Recommendations.Primitives;
+
+namespace NineRecommendations.Core.Recommendations
 {
     public interface IRecommendation
     {
-        bool AreReady { get; }
+        Guid Id { get; }
+        IEnumerable<Track> Recommendations { get; }
+        RecommendationStatus Status { get; }
     }
 }
