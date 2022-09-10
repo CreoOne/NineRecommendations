@@ -1,0 +1,22 @@
+﻿@model QuestionModel
+@{
+    ViewData["Title"] = Model.Content;
+    string IsChecked(Guid id) => (Model.SelectedAnswerId == id || (Model.SelectedAnswerId == null && Model.Answers.First().Id == id)) ? "checked" : string.Empty;
+}
+
+<h2>@Model.Content</h2>
+@using(Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    @foreach(AnswerModel possibleAnswer in Model.Answers)
+    {
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="@nameof(possibleAnswer.Id)" id="@possibleAnswer.Id" value="@possibleAnswer.Id" @Html.Raw(IsChecked(possibleAnswer.Id)) />
+            <label class="form-check-label" for="@possibleAnswer.Id">@possibleAnswer.Content</label>
+        </div>
+    }
+
+    <input type="submit" value="Next" class="btn btn-primary"/>
+}
+
