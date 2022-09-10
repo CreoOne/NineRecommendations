@@ -29,14 +29,14 @@ namespace NineRecommendations.Front.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var questionnaireId = new QuestionnaireIdStorage(HttpContext.Session).Get();
 
             if (questionnaireId == null)
                 return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
 
-            QuestionnaireRepository.Save(new DefaultQuestionnaire(questionnaireId.Value));
+            await QuestionnaireRepository.SaveAsync(new DefaultQuestionnaire(questionnaireId.Value));
             return RedirectToAction(nameof(Answers), new { id = new DefaultQuestion().Id });
         }
 
@@ -70,7 +70,7 @@ namespace NineRecommendations.Front.Controllers
             if (questionnaireId == null)
                 return NotFound();
 
-            var questionnaire = await QuestionnaireRepository.Load(questionnaireId.Value);
+            var questionnaire = await QuestionnaireRepository.LoadAsync(questionnaireId.Value);
 
             if (questionnaire == null)
                 return RedirectToAction(nameof(Index));
@@ -83,8 +83,8 @@ namespace NineRecommendations.Front.Controllers
             if (answer is ILastAnswer lastAnswer)
             {
                 var recommendationJob = lastAnswer.GetRecommendation(questionnaire);
-                await RecommendationRepository.EnqueueNewRecommendationJob(recommendationJob);
-                return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+                await RecommendationRepository.EnqueueNewRecommendationJobAsync(recommendationJob);
+                return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations"); // needs to inform user that it was a success
             }
 
             return NoContent();

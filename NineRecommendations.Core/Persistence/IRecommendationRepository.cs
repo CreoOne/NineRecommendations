@@ -4,8 +4,8 @@ namespace NineRecommendations.Core.Persistence
 {
     public interface IRecommendationRepository
     {
-        Task EnqueueNewRecommendationJob(IRecommendation recommendation);
-        Task<IEnumerable<IRecommendation>> ListAllRecommendations();
-        Task<IRecommendation?> GetRecommendationById(Guid id);
+        Task EnqueueNewRecommendationJobAsync(IRecommendation recommendation);
+        Task<IEnumerable<IRecommendation>> ListAllRecommendationsAsync();
+        Task<IRecommendation?> GetRecommendationByIdAsync(Guid id);
     }
 }

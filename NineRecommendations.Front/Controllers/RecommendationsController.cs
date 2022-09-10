@@ -19,14 +19,14 @@ namespace NineRecommendations.Front.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var recommendations = await RecommendationRepository.ListAllRecommendations();
+            var recommendations = await RecommendationRepository.ListAllRecommendationsAsync();
             return View(RecommendationModel.FromRecommendations(recommendations));
         }
 
         [HttpGet("{controller}/{id}")]
         public async Task<IActionResult> Details(Guid id)
         {
-            var recommendation = await RecommendationRepository.GetRecommendationById(id);
+            var recommendation = await RecommendationRepository.GetRecommendationByIdAsync(id);
 
             if (recommendation == null)
                 return RedirectToAction(nameof(Index)); // TODO - send adequate information bubble to user that this ID does not exist

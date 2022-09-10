@@ -7,13 +7,13 @@ namespace NineRecommendations.Core.Persistence
     {
         private ConcurrentDictionary<Guid, IQuestionnaire> Questionnaires { get; } = new();
 
-        public Task<IQuestionnaire?> Load(Guid id)
+        public Task<IQuestionnaire?> LoadAsync(Guid id)
         {
             Questionnaires.TryGetValue(id, out var questionnaire);
             return Task.FromResult(questionnaire);
         }
 
-        public Task Save(IQuestionnaire questionnaire)
+        public Task SaveAsync(IQuestionnaire questionnaire)
         {
             Questionnaires.TryAdd(questionnaire.Id, questionnaire);
             return Task.CompletedTask;

@@ -4,7 +4,7 @@ namespace NineRecommendations.Core.Persistence
 {
     public interface IQuestionnaireRepository
     {
-        Task Save(IQuestionnaire questionnaire);
-        Task<IQuestionnaire?> Load(Guid id);
+        Task SaveAsync(IQuestionnaire questionnaire);
+        Task<IQuestionnaire?> LoadAsync(Guid id);
     }
 }
