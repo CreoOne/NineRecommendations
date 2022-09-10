@@ -7,6 +7,7 @@ namespace NineRecommendations.Front.Models
     {
         public Guid Id { get; set; }
         public RecommendationStatus Status { get; set; }
+        public DateTime Created { get; set; }
         public TrackModel[] Tracks { get; set; } = Array.Empty<TrackModel>();
 
         internal static RecommendationModel[] FromRecommendations(IEnumerable<IRecommendation> recommendations)
@@ -19,6 +20,7 @@ namespace NineRecommendations.Front.Models
             return new RecommendationModel
             {
                 Id = recommendation.Id,
+                Created = recommendation.Created,
                 Status = recommendation.Status,
                 Tracks = HandleTrackMarshalling(recommendation)
             };

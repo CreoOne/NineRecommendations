@@ -6,6 +6,7 @@ namespace NineRecommendations.Core.Recommendations
     {
         Guid Id { get; }
         IEnumerable<Track> Recommendations { get; }
+        DateTime Created { get; }
         RecommendationStatus Status { get; }
     }
 }

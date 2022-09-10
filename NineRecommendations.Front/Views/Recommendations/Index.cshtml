@@ -10,13 +10,13 @@
 <div class="container text-center">
 @foreach (var recommendation in Model)
 {
-    <a class="nav-link text-dark" asp-area="" asp-controller="Recommendation" asp-action="Details">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Recommendations" asp-action="@recommendation.Id">
         <div class="row">
             <div class="col">
                 @recommendation.Status
             </div>
             <div class="col">
-                Column
+                @recommendation.Created
             </div>
             <div class="col">
                 Column

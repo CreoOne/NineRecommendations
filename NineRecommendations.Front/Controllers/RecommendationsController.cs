@@ -20,7 +20,7 @@ namespace NineRecommendations.Front.Controllers
         public async Task<IActionResult> Index()
         {
             var recommendations = await RecommendationRepository.ListAllRecommendationsAsync();
-            return View(RecommendationModel.FromRecommendations(recommendations));
+            return View(RecommendationModel.FromRecommendations(recommendations.OrderByDescending(recommendations => recommendations.Created)));
         }
 
         [HttpGet("{controller}/{id}")]

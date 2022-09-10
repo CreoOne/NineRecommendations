@@ -8,6 +8,7 @@ namespace NineRecommendations.Spotify.Recommendations
     {
         public Guid Id { get; }
         public RecommendationStatus Status { get; private set; } = RecommendationStatus.Processing;
+        public DateTime Created { get; } = DateTime.UtcNow;
         public IEnumerable<Track> Recommendations { get; private set; } = Enumerable.Empty<Track>();
 
         public Recommendation(Guid id, IQuestionnaire questionnaire)
