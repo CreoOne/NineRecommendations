@@ -18,6 +18,7 @@ namespace NineRecommendations.Front
             });
 
             builder.Services.AddSingleton<IQuestionnaireRepository, InMemoryQuestionnaireRepository>();
+            builder.Services.AddSingleton<IRecommendationRepository, InMemoryRecommendationRepository>();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

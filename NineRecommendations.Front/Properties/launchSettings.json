@@ -7,13 +7,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5201",
-      "launchUrl": "Questions",
+      "launchUrl": "Recommendations",
       "dotnetRunMessages": true
     },
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/Questions",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/Recommendations",
       "publishAllPorts": true
     }
   }

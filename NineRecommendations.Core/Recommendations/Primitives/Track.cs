@@ -4,7 +4,7 @@
     {
         public string Name { get; }
         public string Authors { get; }
-        public TimeSpan Length { get; }
+        public TimeSpan Duration { get; }
         public Uri Uri { get; }
     }
 }

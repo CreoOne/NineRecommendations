@@ -1,0 +1,27 @@
+﻿@model RecommendationModel[]
+@{
+    ViewData["Title"] = "Recommendations";
+}
+
+<h2>All recommendations</h2>
+<form method="post" asp-action="Create">
+    <input type="submit" class="btn btn-primary" value="New" />
+</form>
+<div class="container text-center">
+@foreach (var recommendation in Model)
+{
+    <a class="nav-link text-dark" asp-area="" asp-controller="Recommendation" asp-action="Details">
+        <div class="row">
+            <div class="col">
+                @recommendation.Status
+            </div>
+            <div class="col">
+                Column
+            </div>
+            <div class="col">
+                Column
+            </div>
+        </div>
+    </a>
+}
+</div>

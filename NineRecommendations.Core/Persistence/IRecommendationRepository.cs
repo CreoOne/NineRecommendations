@@ -6,5 +6,6 @@ namespace NineRecommendations.Core.Persistence
     {
         Task EnqueueNewRecommendationJob(IRecommendation recommendation);
         Task<IEnumerable<IRecommendation>> ListAllRecommendations();
+        Task<IRecommendation?> GetRecommendationById(Guid id);
     }
 }

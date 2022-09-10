@@ -5,17 +5,23 @@ namespace NineRecommendations.Core.Persistence
 {
     public sealed class InMemoryRecommendationRepository : IRecommendationRepository
     {
-        private ConcurrentBag<IRecommendation> Recommendations { get; } = new();
+        private ConcurrentDictionary<Guid, IRecommendation> Recommendations { get; } = new();
 
         public Task EnqueueNewRecommendationJob(IRecommendation recommendation)
         {
-            Recommendations.Add(recommendation);
+            Recommendations.TryAdd(recommendation.Id, recommendation);
             return Task.CompletedTask;
+        }
+
+        public Task<IRecommendation?> GetRecommendationById(Guid id)
+        {
+            Recommendations.TryGetValue(id, out IRecommendation? recommendation);
+            return Task.FromResult(recommendation);
         }
 
         public Task<IEnumerable<IRecommendation>> ListAllRecommendations()
         {
-            return Task.FromResult(Recommendations.ToList().AsEnumerable());
+            return Task.FromResult(Recommendations.Values.ToList().AsEnumerable()); // TODO not thread safe, can cause exception
         }
     }
 }

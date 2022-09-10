@@ -31,8 +31,12 @@ namespace NineRecommendations.Front.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var questionnaireId = new QuestionnaireIdStorage(HttpContext.Session).Set();
-            QuestionnaireRepository.Save(new DefaultQuestionnaire(questionnaireId));
+            var questionnaireId = new QuestionnaireIdStorage(HttpContext.Session).Get();
+
+            if (questionnaireId == null)
+                return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+
+            QuestionnaireRepository.Save(new DefaultQuestionnaire(questionnaireId.Value));
             return RedirectToAction(nameof(Answers), new { id = new DefaultQuestion().Id });
         }
 
@@ -80,6 +84,7 @@ namespace NineRecommendations.Front.Controllers
             {
                 var recommendationJob = lastAnswer.GetRecommendation(questionnaire);
                 await RecommendationRepository.EnqueueNewRecommendationJob(recommendationJob);
+                return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
             }
 
             return NoContent();
