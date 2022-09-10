@@ -6,12 +6,12 @@ using NineRecommendations.Spotify.Questionnaries.SingleChoice;
 
 namespace NineRecommendations.Front.Controllers
 {
-    public class QuestionController : Controller
+    public class QuestionsController : Controller
     {
-        private readonly ILogger<QuestionController> _logger;
+        private readonly ILogger<QuestionsController> _logger;
         private readonly IFinder finder = CreateFinder();
 
-        public QuestionController(ILogger<QuestionController> logger)
+        public QuestionsController(ILogger<QuestionsController> logger)
         {
             _logger = logger;
         }
@@ -24,9 +24,9 @@ namespace NineRecommendations.Front.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index() => RedirectToAction("Answers", new { id = new DefaultQuestion().Id });
+        public IActionResult Index() => RedirectToAction(nameof(Answers), new { id = new DefaultQuestion().Id });
 
-        [HttpGet]
+        [HttpGet("{controller}/{id}")]
         public IActionResult Answers([FromRoute] Guid id)
         {
             var question = finder.FindQuestionById(id);
@@ -37,7 +37,7 @@ namespace NineRecommendations.Front.Controllers
             return View(QuestionModel.FromQuestion(question));
         }
 
-        [HttpPost]
+        [HttpPost("{controller}/{id}")]
         [ValidateAntiForgeryToken]
         public IActionResult Answers([FromRoute] Guid id, [FromForm] AnswerModel model)
         {
@@ -52,7 +52,7 @@ namespace NineRecommendations.Front.Controllers
                 return NotFound();
 
             if (answer is IPassTroughAnswer passTroughAnswer)
-                return RedirectToAction("Answers", new { id = passTroughAnswer.GetNextQuestion().Id });
+                return RedirectToAction(nameof(Answers), new { id = passTroughAnswer.GetNextQuestion().Id });
 
             return NoContent();
         }
