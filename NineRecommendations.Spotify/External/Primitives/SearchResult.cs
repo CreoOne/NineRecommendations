@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace NineRecommendations.Spotify.External.Primitives
 {
-    internal class SearchResult
+    public class SearchResult
     {
-
+        public IEnumerable<string> TrackIds { get; init; } = Enumerable.Empty<string>();
     }
 }

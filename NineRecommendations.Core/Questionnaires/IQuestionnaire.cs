@@ -3,7 +3,7 @@
     public interface IQuestionnaire
     {
         Guid Id { get; }
-        void AddAnswer(IQuestion question, IAnswer answer);
-        IDictionary<IQuestion, IAnswer> GetQuestionAnswerPairs();
+        void AddAnswer(Guid question, Guid answer);
+        IDictionary<Guid, Guid> GetQuestionAnswerPairs();
     }
 }

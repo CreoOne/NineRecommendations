@@ -4,6 +4,7 @@
     {
         Processing = 0,
         Ready = 1,
-        Error = 2
+        Empty = 2,
+        Error = 3,
     }
 }

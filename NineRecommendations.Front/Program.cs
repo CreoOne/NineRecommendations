@@ -1,4 +1,8 @@
+using Microsoft.Extensions.Options;
 using NineRecommendations.Core.Persistence;
+using NineRecommendations.Core.Recommendations;
+using NineRecommendations.Spotify.External;
+using NineRecommendations.Spotify.External.Options;
 
 namespace NineRecommendations.Front
 {
@@ -10,6 +14,7 @@ namespace NineRecommendations.Front
 
             // Add services to the container.
 
+            builder.Services.Configure<SpotifyOptions>(builder.Configuration.GetSection(nameof(SpotifyOptions)));
             builder.Services.AddSession(options =>
             {
                 options.Cookie.Name = ".Que";
@@ -17,8 +22,24 @@ namespace NineRecommendations.Front
                 options.Cookie.IsEssential = false;
             });
 
+            builder.Services.AddHttpClient();
             builder.Services.AddSingleton<IQuestionnaireRepository, InMemoryQuestionnaireRepository>();
             builder.Services.AddSingleton<IRecommendationRepository, InMemoryRecommendationRepository>();
+            builder.Services.AddSingleton<ISpotifyApi>(serviceProvider =>
+            {
+                var options = serviceProvider.GetRequiredService<IOptions<SpotifyOptions>>().Value;
+                var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+                return new DefaultSpotifyApi(httpClientFactory, options);
+            });
+            builder.Services.AddSingleton<IRecommendationBuilder>(serviceProvider =>
+            {
+                var recommendationBuilder = new DefaultRecommendationBuilder();
+
+                var spotifyApi = serviceProvider.GetRequiredService<ISpotifyApi>();
+                recommendationBuilder.AddRecommendationBuilder(new Spotify.Recommendations.RecommendationBuilder(spotifyApi));
+
+                return recommendationBuilder;
+            });
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -38,7 +59,7 @@ namespace NineRecommendations.Front
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Recommendations}/{action=Index}/{id?}");
 
             app.Run();
         }

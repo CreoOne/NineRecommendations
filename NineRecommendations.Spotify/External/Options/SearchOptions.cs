@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NineRecommendations.Spotify.External.Options
 {
-    internal class SearchOptions
+    public class SearchOptions
     {
-        public string Genre { get; set; } = string.Empty;
-        public Range Year { get; set; }
+        public string? Genre { get; set; }
+        public Range Year { get; set; } = new Range(1900, DateTime.UtcNow.Year);
     }
 }

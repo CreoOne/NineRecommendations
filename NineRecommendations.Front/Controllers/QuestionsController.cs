@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NineRecommendations.Core.Persistence;
 using NineRecommendations.Core.Questionnaires;
+using NineRecommendations.Core.Recommendations;
 using NineRecommendations.Front.Helpers;
 using NineRecommendations.Front.Models;
 using NineRecommendations.Spotify.Questionnaries;
@@ -13,12 +14,14 @@ namespace NineRecommendations.Front.Controllers
         private ILogger<QuestionsController> Logger { get; }
         private IQuestionnaireRepository QuestionnaireRepository { get; }
         private IRecommendationRepository RecommendationRepository { get; }
+        private IRecommendationBuilder RecommedationBuilder { get; }
 
-        public QuestionsController(ILogger<QuestionsController> logger, IQuestionnaireRepository questionnaireRepository, IRecommendationRepository recommendationRepository)
+        public QuestionsController(ILogger<QuestionsController> logger, IQuestionnaireRepository questionnaireRepository, IRecommendationRepository recommendationRepository, IRecommendationBuilder recommedationBuilder)
         {
             Logger = logger;
             QuestionnaireRepository = questionnaireRepository;
             RecommendationRepository = recommendationRepository;
+            RecommedationBuilder = recommedationBuilder;
         }
 
         private static IFinder CreateFinder()
@@ -75,14 +78,18 @@ namespace NineRecommendations.Front.Controllers
             if (questionnaire == null)
                 return RedirectToAction(nameof(Index));
 
-            questionnaire.AddAnswer(question, answer);
+            questionnaire.AddAnswer(question.Id, answer.Id);
 
             if (answer is IPassTroughAnswer passTroughAnswer)
                 return RedirectToAction(nameof(Answers), new { id = passTroughAnswer.GetNextQuestion().Id });
 
-            if (answer is ILastAnswer lastAnswer)
+            if (answer is ILastAnswer)
             {
-                var recommendationJob = lastAnswer.GetRecommendation(questionnaire);
+                var recommendationJob = RecommedationBuilder.BuildRecommendation(answer, questionnaire);
+
+                if (recommendationJob == null)
+                    return RedirectToAction(nameof(Index)); // needs to inform user that error occurred
+
                 await RecommendationRepository.EnqueueNewRecommendationJobAsync(recommendationJob);
                 return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations"); // needs to inform user that it was a success
             }
