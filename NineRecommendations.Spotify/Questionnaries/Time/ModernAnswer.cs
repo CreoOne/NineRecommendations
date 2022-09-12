@@ -1,8 +1,6 @@
 ﻿using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Core.Recommendations;
-using NineRecommendations.Spotify.Recommendations;
 
-namespace NineRecommendations.Spotify.Questionnaries.SingleChoice.Time
+namespace NineRecommendations.Spotify.Questionnaries.Time
 {
     public sealed class Timeless : ILastAnswer
     {

@@ -1,14 +1,8 @@
-﻿using NineRecommendations.Core.Recommendations.Primitives;
+﻿using NineRecommendations.Spotify.External.Models;
 using NineRecommendations.Spotify.External.Options;
-using NineRecommendations.Spotify.External.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace NineRecommendations.Spotify.External
 {
@@ -23,15 +17,14 @@ namespace NineRecommendations.Spotify.External
             SpotifyOptions = spotifyOptions;
         }
 
-        public async Task<SearchResult> CallSearchAsync(SearchOptions searchOptions)
+        public async Task<RootObject?> CallSearchAsync(SearchOptions searchOptions)
         {
             var httpClient = await CreateHttpClient();
 
             var uri = await ConstructUriAsync(searchOptions);
             var result = await httpClient.GetAsync(uri);
-            var content = await result.Content.ReadAsStringAsync();
-            
-            return new SearchResult { TrackIds = new[] { "aXf", "GZX" } };
+            using var content = await result.Content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<RootObject>(content);
         }
 
         private async Task<string> ConstructUriAsync(SearchOptions searchOptions)
@@ -60,13 +53,6 @@ namespace NineRecommendations.Spotify.External
             var formUrlEncoded = new FormUrlEncodedContent(parameters);
             uri.Append(await formUrlEncoded.ReadAsStringAsync());
             return uri.ToString();
-
-            //return "/v1/search?q=chill%20genre:ambient%20year:1900-2022&type=track";
-        }
-
-        public Task<TracksResult> CallTracksAsync(IEnumerable<string> ids)
-        {
-            return Task.FromResult(new TracksResult { Tracks = new[] { new Track("Lorem Ipsum", "Authors", TimeSpan.FromSeconds(91), new Uri("https://example.com/")) } });
         }
 
         private async Task<HttpClient> CreateHttpClient()
@@ -75,7 +61,7 @@ namespace NineRecommendations.Spotify.External
 
             var httpClient = HttpClientFactory.CreateClient();
             httpClient.BaseAddress = new Uri("https://api.spotify.com/");
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authToken.token_type, authToken.access_token);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authToken.TokenType, authToken.Token);
 
             return httpClient;
         }

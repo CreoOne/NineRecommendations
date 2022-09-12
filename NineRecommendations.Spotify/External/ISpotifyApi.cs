@@ -1,11 +1,10 @@
-﻿using NineRecommendations.Spotify.External.Options;
-using NineRecommendations.Spotify.External.Primitives;
+﻿using NineRecommendations.Spotify.External.Models;
+using NineRecommendations.Spotify.External.Options;
 
 namespace NineRecommendations.Spotify.External
 {
     public interface ISpotifyApi
     {
-        Task<TracksResult> CallTracksAsync(IEnumerable<string> ids);
-        Task<SearchResult> CallSearchAsync(SearchOptions searchOptions);
+        Task<RootObject?> CallSearchAsync(SearchOptions searchOptions);
     }
 }

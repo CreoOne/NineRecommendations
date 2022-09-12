@@ -1,6 +1,6 @@
 ﻿using NineRecommendations.Core.Questionnaires;
 
-namespace NineRecommendations.Spotify.Questionnaries.SingleChoice.Time
+namespace NineRecommendations.Spotify.Questionnaries.Time
 {
     public sealed class TimeQuestion : IQuestion
     {

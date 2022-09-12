@@ -1,6 +1,6 @@
 ﻿using NineRecommendations.Core.Questionnaires;
 
-namespace NineRecommendations.Spotify.Questionnaries.SingleChoice.Activity
+namespace NineRecommendations.Spotify.Questionnaries.Activity
 {
     public sealed class ActivityQuestion : IQuestion
     {

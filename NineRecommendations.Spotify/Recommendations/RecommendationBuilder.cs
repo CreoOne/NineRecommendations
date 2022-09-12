@@ -1,7 +1,7 @@
 ﻿using NineRecommendations.Core.Questionnaires;
 using NineRecommendations.Core.Recommendations;
 using NineRecommendations.Spotify.External;
-using NineRecommendations.Spotify.Questionnaries.SingleChoice.Time;
+using NineRecommendations.Spotify.Questionnaries.Time;
 
 namespace NineRecommendations.Spotify.Recommendations
 {

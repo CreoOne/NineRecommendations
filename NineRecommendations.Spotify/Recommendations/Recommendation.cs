@@ -3,8 +3,8 @@ using NineRecommendations.Core.Recommendations;
 using NineRecommendations.Core.Recommendations.Primitives;
 using NineRecommendations.Spotify.External;
 using NineRecommendations.Spotify.External.Options;
-using NineRecommendations.Spotify.Questionnaries.SingleChoice.Activity;
-using NineRecommendations.Spotify.Questionnaries.SingleChoice.Time;
+using NineRecommendations.Spotify.Questionnaries.Activity;
+using NineRecommendations.Spotify.Questionnaries.Time;
 
 namespace NineRecommendations.Spotify.Recommendations
 {
@@ -34,29 +34,34 @@ namespace NineRecommendations.Spotify.Recommendations
                 // needs more than one search to give more diverse recommendations
                 var searchResult = await spotifyApi.CallSearchAsync(searchOptions);
 
-                if (!searchResult.TrackIds.Any())
-                {
-                    Status = RecommendationStatus.Empty;
-                    return;
-                }
-
-                var tracksResult = await spotifyApi.CallTracksAsync(searchResult.TrackIds.ToArray());
-
-                if (!tracksResult.Tracks.Any())
+                if (searchResult == null)
                 {
                     Status = RecommendationStatus.Empty;
                     return;
                 }
 
                 // needs shuffling from wider array of tracks to make recommendations more diverse
-                Recommendations = tracksResult.Tracks.Take(9);
+                Recommendations = MarshallItemsToTracks(searchResult.Tracks.Items).Take(9);
                 Status = RecommendationStatus.Ready;
             }
 
-            catch(Exception exception)
+            catch
             {
                 Status = RecommendationStatus.Error;
             }
+        }
+
+        private static IEnumerable<Track> MarshallItemsToTracks(External.Models.Item[] items)
+        {
+            return items.Select(MarshallItemToTrack);
+        }
+
+        private static Track MarshallItemToTrack(External.Models.Item item)
+        {
+            var artists = string.Join(", ", item.Artists.Select(artist => artist.Name));
+            var duration = TimeSpan.FromMilliseconds(item.DurationMs);
+            var uri = new Uri(item.ExternalUrls.Spotify);
+            return new Track(item.Name, artists, duration, uri);
         }
 
         private static string? SelectGenre(IQuestionnaire questionnaire)

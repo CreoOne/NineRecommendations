@@ -1,7 +1,7 @@
 ﻿using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Spotify.Questionnaries.SingleChoice.Time;
+using NineRecommendations.Spotify.Questionnaries.Time;
 
-namespace NineRecommendations.Spotify.Questionnaries.SingleChoice.Activity
+namespace NineRecommendations.Spotify.Questionnaries.Activity
 {
     public sealed class ExploreAnswer : IPassTroughAnswer
     {
