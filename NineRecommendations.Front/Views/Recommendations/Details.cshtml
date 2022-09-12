@@ -3,38 +3,44 @@
     ViewData["Title"] = $"{@Model.Name} recommendation";
 }
 
-<h2>@Model.Name recommendation</h2>
-<div class="container">
+<div class="container mb-3 mt-5">
+    <h2>@Model.Name recommendation</h2>
+</div>
+
+<div class="container mb-3">
     <form method="post" asp-action="Refine">
         <input type="submit" class="btn btn-dark" value="Refine" title="Sorry not available right now" disabled/>
     </form>
+</div>
+
+<div class="container mb-3">
     <div class="row">
-        <div class="col fw-bold">
+        <div class="col fw-bold bg-light m-1 p-3">
             Name
         </div>
-        <div class="col fw-bold">
+        <div class="col fw-bold bg-light m-1 p-3">
             Authors
         </div>
-        <div class="col fw-bold">
+        <div class="col-2 fw-bold bg-light m-1 p-3">
             Duration
         </div>
-        <div class="col fw-bold">
+        <div class="col-2 fw-bold bg-light m-1 p-3">
             Link
         </div>
     </div>
 @foreach (var recommendation in Model.Tracks)
 {
     <div class="row">
-        <div class="col">
+        <div class="col bg-light m-1 p-3">
             @recommendation.Name
         </div>
-        <div class="col">
+        <div class="col bg-light m-1 p-3">
             @recommendation.Authors
         </div>
-        <div class="col">
+        <div class="col-2 bg-light m-1 p-3">
             @recommendation.Duration.ToString(@"%m\:%s")
         </div>
-        <div class="col">
+        <div class="col-2 bg-light m-1 p-3">
             <a href="@recommendation.Uri">on Spotify</a>
         </div>
     </div>

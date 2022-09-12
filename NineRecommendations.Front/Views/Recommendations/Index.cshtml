@@ -3,36 +3,54 @@
     ViewData["Title"] = "Recommendations";
 }
 
-<h2>All recommendations</h2>
-<div class="container">
+<div class="container mb-3 mt-5">
+    <h2>All recommendations</h2>
+    <div class="text-secondary">Recommendation processing status doesnt refresh automaticaly. To see change in status please refresh.</div>
+</div>
+
+<div class="container mb-3">
     <form method="post" asp-action="Create">
         <input type="submit" class="btn btn-primary" value="New" />
     </form>
+</div>
+
+<div class="container mb-3">
     <div class="row">
-        <div class="col fw-bold">
+        <div class="col fw-bold bg-light m-1 p-3">
             Name
         </div>
-        <div class="col fw-bold">
+        <div class="col fw-bold bg-light m-1 p-3">
             Status
         </div>
-        <div class="col fw-bold">
+        <div class="col fw-bold bg-light m-1 p-3">
             Created
         </div>
     </div>
-@foreach (var recommendation in Model)
-{
-    <a class="nav-link text-dark" asp-area="" asp-controller="Recommendations" asp-action="@recommendation.Id">
+    @if (Model.Length > 0)
+    {
+        @foreach (var recommendation in Model)
+        {
+            <a class="text-dark text-decoration-none" asp-area="" asp-controller="Recommendations" asp-action="@recommendation.Id">
+                <div class="row">
+                    <div class="col bg-light m-1 p-3">
+                        @recommendation.Name
+                    </div>
+                    <div class="col bg-light m-1 p-3">
+                        @recommendation.Status
+                    </div>
+                    <div class="col bg-light m-1 p-3">
+                        @recommendation.Created
+                    </div>
+                </div>
+            </a>
+        }
+    }
+    else
+    {
         <div class="row">
-            <div class="col">
-                @recommendation.Name
-            </div>
-            <div class="col">
-                @recommendation.Status
-            </div>
-            <div class="col">
-                @recommendation.Created
+            <div class="col bg-light text-center m-1 p-3">
+                No recommendations created yet. You can start by clicking New button above.
             </div>
         </div>
-    </a>
-}
+    }
 </div>
