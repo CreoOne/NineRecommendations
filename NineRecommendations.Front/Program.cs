@@ -18,8 +18,7 @@ namespace NineRecommendations.Front
             builder.Services.AddSession(options =>
             {
                 options.Cookie.Name = ".Que";
-                options.IdleTimeout = TimeSpan.FromSeconds(30);
-                options.Cookie.IsEssential = false;
+                options.Cookie.IsEssential = true;
             });
 
             builder.Services.AddHttpClient();

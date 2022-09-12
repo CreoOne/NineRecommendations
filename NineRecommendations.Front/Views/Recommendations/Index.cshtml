@@ -10,6 +10,9 @@
     </form>
     <div class="row">
         <div class="col fw-bold">
+            Name
+        </div>
+        <div class="col fw-bold">
             Status
         </div>
         <div class="col fw-bold">
@@ -20,6 +23,9 @@
 {
     <a class="nav-link text-dark" asp-area="" asp-controller="Recommendations" asp-action="@recommendation.Id">
         <div class="row">
+            <div class="col">
+                @recommendation.Name
+            </div>
             <div class="col">
                 @recommendation.Status
             </div>

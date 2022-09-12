@@ -1,5 +1,6 @@
 ﻿using NineRecommendations.Core.Questionnaires;
 using NineRecommendations.Core.Questionnaires.Answers;
+using NineRecommendations.Core.Questionnaires.Finders;
 using NineRecommendations.Core.Recommendations;
 using NineRecommendations.Spotify.External;
 using NineRecommendations.Spotify.Questionnaries;
@@ -21,12 +22,24 @@ namespace NineRecommendations.Spotify.Recommendations
             Answers.OldSchool.Id
         };
 
-        public IRecommendation? BuildRecommendation(IAnswer answer, IQuestionnaire questionnaire)
+        public IRecommendation? BuildRecommendation(IAnswer answer, IFinder finder, IQuestionnaire questionnaire)
         {
             if(LastAnswers.Contains(answer.Id))
-                return new Recommendation(Guid.NewGuid(), questionnaire, SpotifyApi);
+                return new Recommendation(Guid.NewGuid(), ConstructName(finder, questionnaire), questionnaire, SpotifyApi);
 
             return null;
+        }
+
+        private static string ConstructName(IFinder finder, IQuestionnaire questionnaire)
+        {
+            var contents = questionnaire
+                .GetQuestionAnswerPairs()
+                .Values
+                .Select(finder.FindAnswerById)
+                .Where(answer => answer != null)
+                .Select(answer => answer!.Content);
+
+            return string.Join(", ", contents);
         }
     }
 }

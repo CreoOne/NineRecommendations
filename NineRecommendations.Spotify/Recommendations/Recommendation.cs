@@ -1,4 +1,6 @@
 ﻿using NineRecommendations.Core.Questionnaires;
+using NineRecommendations.Core.Questionnaires.Answers;
+using NineRecommendations.Core.Questionnaires.Finders;
 using NineRecommendations.Core.Questionnaires.Questions;
 using NineRecommendations.Core.Recommendations;
 using NineRecommendations.Core.Recommendations.Primitives;
@@ -12,14 +14,16 @@ namespace NineRecommendations.Spotify.Recommendations
     public class Recommendation : IRecommendation
     {
         public Guid Id { get; }
+        public string Name { get; }
         public RecommendationStatus Status { get; private set; } = RecommendationStatus.Processing;
         public DateTime Created { get; } = DateTime.UtcNow;
         public IEnumerable<Track> Recommendations { get; private set; } = Enumerable.Empty<Track>();
 
-        public Recommendation(Guid id, IQuestionnaire questionnaire, ISpotifyApi spotifyApi)
+        public Recommendation(Guid id, string name, IQuestionnaire questionnaire, ISpotifyApi spotifyApi)
         {
             Id = id;
-            Task.Factory.StartNew(async () => await ProcessAsync(questionnaire, spotifyApi));
+            Name = name;
+            Task.Factory.StartNew(async () => await ProcessAsync(questionnaire, spotifyApi).ConfigureAwait(false));
         }
 
         private async Task ProcessAsync(IQuestionnaire questionnaire, ISpotifyApi spotifyApi)
@@ -63,7 +67,7 @@ namespace NineRecommendations.Spotify.Recommendations
                 return "ambient";
 
             if (answerId == Answers.Explore.Id)
-                return "drone";
+                return "chill";
 
             if (answerId == Answers.Chopper.Id)
                 return "rock-n-roll";

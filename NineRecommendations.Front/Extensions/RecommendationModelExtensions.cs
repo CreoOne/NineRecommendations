@@ -12,6 +12,7 @@ namespace NineRecommendations.Front.Extensions
         public static RecommendationModel ToViewModel(this IRecommendation recommendation) => new RecommendationModel
         {
             Id = recommendation.Id,
+            Name = recommendation.Name,
             Created = recommendation.Created,
             Status = recommendation.Status,
             Tracks = recommendation.Recommendations.ToViewModels()

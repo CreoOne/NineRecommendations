@@ -93,7 +93,7 @@ namespace NineRecommendations.Front.Controllers
 
             if (answer is ILastAnswer)
             {
-                var recommendationJob = RecommedationBuilder.BuildRecommendation(answer, questionnaire);
+                var recommendationJob = RecommedationBuilder.BuildRecommendation(answer, finder, questionnaire);
 
                 if (recommendationJob == null)
                     return RedirectToAction(nameof(Index)); // needs to inform user that error occurred
