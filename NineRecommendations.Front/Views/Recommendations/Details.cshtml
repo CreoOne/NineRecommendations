@@ -4,5 +4,37 @@
 }
 
 <h2>Recommendation</h2>
-
+<div class="container">
+    <div class="row">
+        <div class="col fw-bold">
+            Name
+        </div>
+        <div class="col fw-bold">
+            Authors
+        </div>
+        <div class="col fw-bold">
+            Duration
+        </div>
+        <div class="col fw-bold">
+            Link
+        </div>
+    </div>
+@foreach (var recommendation in Model.Tracks)
+{
+    <div class="row">
+        <div class="col">
+            @recommendation.Name
+        </div>
+        <div class="col">
+            @recommendation.Authors
+        </div>
+        <div class="col">
+            @recommendation.Duration.ToString(@"%m\:%s")
+        </div>
+        <div class="col">
+            <a href="@recommendation.Uri">on Spotify</a>
+        </div>
+    </div>
+}
+</div>
 
