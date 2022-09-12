@@ -46,6 +46,11 @@ namespace NineRecommendations.Front.Controllers
         [HttpGet("{controller}/{id}")]
         public IActionResult Answers([FromRoute] Guid id)
         {
+            var questionnaireId = new QuestionnaireIdStorage(HttpContext.Session).Get();
+
+            if (questionnaireId == null)
+                return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+
             var question = finder.FindQuestionById(id);
 
             if(question == null)
@@ -89,6 +94,8 @@ namespace NineRecommendations.Front.Controllers
 
                 if (recommendationJob == null)
                     return RedirectToAction(nameof(Index)); // needs to inform user that error occurred
+
+                await QuestionnaireRepository.DeleteAsync(questionnaire.Id);
 
                 await RecommendationRepository.EnqueueNewRecommendationJobAsync(recommendationJob);
                 return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations"); // needs to inform user that it was a success
