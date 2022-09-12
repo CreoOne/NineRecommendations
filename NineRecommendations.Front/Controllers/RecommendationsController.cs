@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NineRecommendations.Core.Persistence;
+using NineRecommendations.Front.Extensions;
 using NineRecommendations.Front.Helpers;
-using NineRecommendations.Front.Models;
 
 namespace NineRecommendations.Front.Controllers
 {
@@ -20,7 +20,7 @@ namespace NineRecommendations.Front.Controllers
         public async Task<IActionResult> Index()
         {
             var recommendations = await RecommendationRepository.ListAllRecommendationsAsync();
-            return View(RecommendationModel.FromRecommendations(recommendations.OrderByDescending(recommendations => recommendations.Created)));
+            return View(recommendations.OrderByDescending(recommendations => recommendations.Created).ToViewModels());
         }
 
         [HttpGet("{controller}/{id}")]
@@ -31,7 +31,7 @@ namespace NineRecommendations.Front.Controllers
             if (recommendation == null)
                 return RedirectToAction(nameof(Index)); // TODO - send adequate information bubble to user that this ID does not exist
 
-            return View(RecommendationModel.FromRecommendation(recommendation));
+            return View(recommendation.ToViewModel());
         }
 
         [HttpPost]

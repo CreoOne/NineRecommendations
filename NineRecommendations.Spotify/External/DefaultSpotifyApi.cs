@@ -20,9 +20,11 @@ namespace NineRecommendations.Spotify.External
         public async Task<RootObject?> CallSearchAsync(SearchOptions searchOptions)
         {
             var httpClient = await CreateHttpClient();
-
             var uri = await ConstructUriAsync(searchOptions);
             var result = await httpClient.GetAsync(uri);
+
+            var text = await result.Content.ReadAsStringAsync();
+
             using var content = await result.Content.ReadAsStreamAsync();
             return await JsonSerializer.DeserializeAsync<RootObject>(content);
         }

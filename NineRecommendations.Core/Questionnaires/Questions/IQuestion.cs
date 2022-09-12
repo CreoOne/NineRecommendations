@@ -1,4 +1,6 @@
-﻿namespace NineRecommendations.Core.Questionnaires
+﻿using NineRecommendations.Core.Questionnaires.Answers;
+
+namespace NineRecommendations.Core.Questionnaires.Questions
 {
     public interface IQuestion
     {

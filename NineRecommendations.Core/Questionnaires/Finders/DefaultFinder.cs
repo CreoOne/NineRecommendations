@@ -1,4 +1,7 @@
-﻿namespace NineRecommendations.Core.Questionnaires
+﻿using NineRecommendations.Core.Questionnaires.Answers;
+using NineRecommendations.Core.Questionnaires.Questions;
+
+namespace NineRecommendations.Core.Questionnaires.Finders
 {
     public sealed class DefaultFinder : IFinder
     {

@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NineRecommendations.Core.Persistence;
 using NineRecommendations.Core.Questionnaires;
+using NineRecommendations.Core.Questionnaires.Answers;
+using NineRecommendations.Core.Questionnaires.Finders;
+using NineRecommendations.Core.Questionnaires.Questions;
 using NineRecommendations.Core.Recommendations;
+using NineRecommendations.Front.Extensions;
 using NineRecommendations.Front.Helpers;
 using NineRecommendations.Front.Models;
-using NineRecommendations.Spotify.Questionnaries;
 
 namespace NineRecommendations.Front.Controllers
 {
@@ -27,7 +30,7 @@ namespace NineRecommendations.Front.Controllers
         private static IFinder CreateFinder()
         {
             var questionFinder = new DefaultFinder();
-            questionFinder.AddQuestionsByTraversal(new DefaultQuestion(new SpotifyAnswer()));
+            questionFinder.AddQuestionsByTraversal(new EntryQuestion(Spotify.Questionnaries.Answers.Spotify));
             return questionFinder;
         }
 
@@ -40,7 +43,7 @@ namespace NineRecommendations.Front.Controllers
                 return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
 
             await QuestionnaireRepository.SaveAsync(new DefaultQuestionnaire(questionnaireId.Value));
-            return RedirectToAction(nameof(Answers), new { id = new DefaultQuestion().Id });
+            return RedirectToAction(nameof(Answers), new { id = new EntryQuestion().Id });
         }
 
         [HttpGet("{controller}/{id}")]
@@ -56,7 +59,7 @@ namespace NineRecommendations.Front.Controllers
             if(question == null)
                 return NotFound();
 
-            return View(QuestionModel.FromQuestion(question));
+            return View(question.ToViewModel());
         }
 
         [HttpPost("{controller}/{id}")]

@@ -1,4 +1,4 @@
-﻿namespace NineRecommendations.Core.Questionnaires
+﻿namespace NineRecommendations.Core.Questionnaires.Answers
 {
     public interface IAnswer
     {
