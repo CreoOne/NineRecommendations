@@ -32,7 +32,7 @@ namespace NineRecommendations.Front.Controllers
             var recommendation = await RecommendationRepository.GetRecommendationByIdAsync(id);
 
             if (recommendation == null)
-                return RedirectToAction(nameof(Index)); // TODO - send adequate information bubble to user that this ID does not exist
+                return RedirectToAction(nameof(Index)); // // needs errors to be forwarded to ViewModel
 
             return View(recommendation.ToViewModel());
         }
@@ -42,14 +42,14 @@ namespace NineRecommendations.Front.Controllers
         {
             var questionnaireId = await QuestionnaireManipulator.StartNewQuestionnaireAsync();
             QuestionnaireIdStorage.Set(HttpContext.Session, questionnaireId);
-            return RedirectToAction(nameof(QuestionsController.Answers), "Questions", new { id = QuestionnaireManipulator.GetFirstQuestionId() });
+            return RedirectToAction(nameof(QuestionsController.Ask), "Questions", new { id = QuestionnaireManipulator.GetFirstQuestionId() });
         }
 
         public async Task<IActionResult> Refine(Guid id)
         {
             var questionnaireId = await QuestionnaireManipulator.RefineQuestionnaireAsync(id);
             QuestionnaireIdStorage.Set(HttpContext.Session, questionnaireId);
-            return RedirectToAction(nameof(QuestionsController.Answers), "Questions", new { id = QuestionnaireManipulator.GetRefineQuestionId() });
+            return RedirectToAction(nameof(QuestionsController.Ask), "Questions", new { id = QuestionnaireManipulator.GetRefineQuestionId() });
         }
     }
 }

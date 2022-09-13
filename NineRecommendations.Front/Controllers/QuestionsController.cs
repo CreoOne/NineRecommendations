@@ -18,11 +18,12 @@ namespace NineRecommendations.Front.Controllers
         }
 
         [HttpGet("{controller}/{id}")]
-        public IActionResult Answers([FromRoute] Guid id)
+        public IActionResult Ask([FromRoute] Guid id)
         {
             var questionnaireId = QuestionnaireIdStorage.Get(HttpContext.Session);
 
             if (questionnaireId == null)
+                // needs to be extracted into separate method
                 return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
 
             var question = QuestionnaireManipulator.GetQuestionById(id);
@@ -35,7 +36,7 @@ namespace NineRecommendations.Front.Controllers
 
         [HttpPost("{controller}/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Answers([FromRoute] Guid id, [FromForm] AnswerModel model)
+        public async Task<IActionResult> Ask([FromRoute] Guid id, [FromForm] AnswerModel model)
         {
             var questionnaireId = QuestionnaireIdStorage.Get(HttpContext.Session);
 
@@ -47,7 +48,7 @@ namespace NineRecommendations.Front.Controllers
             if(result.NextQuestionId.HasValue)
             {
                 // needs info & warnings to be forwarded to ViewModel
-                return RedirectToAction(nameof(Answers), new { id = result.NextQuestionId.Value });
+                return RedirectToAction(nameof(Ask), new { id = result.NextQuestionId.Value });
             }
 
             // needs errors to be forwarded to ViewModel

@@ -27,7 +27,7 @@ namespace NineRecommendations.Spotify.External
                 .SetTag(searchOptions.Unique)
                 .Build();
                 
-            var result = await httpClient.GetAsync(uri);
+            using var result = await httpClient.GetAsync(uri);
 
             var text = await result.Content.ReadAsStringAsync();
 
@@ -54,7 +54,7 @@ namespace NineRecommendations.Spotify.External
             var concatenated = string.Concat(spotifyOptions.ClientId, ":", spotifyOptions.ClientSecret);
             var base64EncodedSecrets = Convert.ToBase64String(Encoding.ASCII.GetBytes(concatenated));
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64EncodedSecrets);    
-            var response = await httpClient.PostAsync("https://accounts.spotify.com/api/token", AuthPostContent);
+            using var response = await httpClient.PostAsync("https://accounts.spotify.com/api/token", AuthPostContent);
             using var responseStream = await response.Content.ReadAsStreamAsync();
             return await JsonSerializer.DeserializeAsync<AccessToken>(responseStream) ?? throw new InvalidOperationException(); // this is not the proper way of handling errors of this kind
         }
