@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NineRecommendations.Core.Persistence;
+using NineRecommendations.Core.Questionnaires;
 using NineRecommendations.Front.Extensions;
 using NineRecommendations.Front.Helpers;
 
@@ -9,11 +10,13 @@ namespace NineRecommendations.Front.Controllers
     {
         private ILogger<RecommendationsController> Logger { get; }
         private IRecommendationRepository RecommendationRepository { get; }
+        private IQuestionnaireManipulator QuestionnaireManipulator { get; }
 
-        public RecommendationsController(ILogger<RecommendationsController> logger, IRecommendationRepository recommendationRepository)
+        public RecommendationsController(ILogger<RecommendationsController> logger, IRecommendationRepository recommendationRepository, IQuestionnaireManipulator questionnaireManipulator)
         {
             Logger = logger;
             RecommendationRepository = recommendationRepository;
+            QuestionnaireManipulator = questionnaireManipulator;
         }
 
         [HttpGet]
@@ -35,10 +38,11 @@ namespace NineRecommendations.Front.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var questionnaireId = new QuestionnaireIdStorage(HttpContext.Session).Set();
-            return RedirectToAction(nameof(QuestionsController.Index), "Questions");
+            var questionnaireId = await QuestionnaireManipulator.StartNewQuestionnaireAsync();
+            QuestionnaireIdStorage.Set(HttpContext.Session, questionnaireId);
+            return RedirectToAction(nameof(QuestionsController.Answers), "Questions", new { id = QuestionnaireManipulator.GetFirstQuestionId() });
         }
     }
 }

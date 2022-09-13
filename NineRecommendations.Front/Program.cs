@@ -1,5 +1,8 @@
 using Microsoft.Extensions.Options;
 using NineRecommendations.Core.Persistence;
+using NineRecommendations.Core.Questionnaires;
+using NineRecommendations.Core.Questionnaires.Finders;
+using NineRecommendations.Core.Questionnaires.Questions;
 using NineRecommendations.Core.Recommendations;
 using NineRecommendations.Spotify.External;
 using NineRecommendations.Spotify.External.Options;
@@ -22,6 +25,7 @@ namespace NineRecommendations.Front
             });
 
             builder.Services.AddHttpClient();
+            builder.Services.AddSingleton<IFinder, DefaultFinder>(serviceProvider => new DefaultFinder(new EntryQuestion(Spotify.Questionnaries.Answers.Spotify)));
             builder.Services.AddSingleton<IQuestionnaireRepository, InMemoryQuestionnaireRepository>();
             builder.Services.AddSingleton<IRecommendationRepository, InMemoryRecommendationRepository>();
             builder.Services.AddSingleton<ISpotifyApi>(serviceProvider =>
@@ -39,6 +43,7 @@ namespace NineRecommendations.Front
 
                 return recommendationBuilder;
             });
+            builder.Services.AddSingleton<IQuestionnaireManipulator, DefaultQuestionnaireManipulator>();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

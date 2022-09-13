@@ -2,18 +2,11 @@
 {
     public class QuestionnaireIdStorage
     {
-        public QuestionnaireIdStorage(ISession session)
-        {
-            Session = session;
-        }
-
-        private ISession Session { get; }
-
         private const string SessionKey = "_qid"; // confusing name for security reasons :D
 
-        public Guid? Get()
+        public static Guid? Get(ISession session)
         {
-            var sessionString = Session.GetString(SessionKey);
+            var sessionString = session.GetString(SessionKey);
 
             if(sessionString == null)
                 return null;
@@ -24,11 +17,6 @@
             return null;
         }
 
-        public Guid Set()
-        {
-            var guid = Guid.NewGuid();
-            Session.SetString(SessionKey, guid.ToString());
-            return guid;
-        }
+        public static void Set(ISession session, Guid id) => session.SetString(SessionKey, id.ToString());
     }
 }

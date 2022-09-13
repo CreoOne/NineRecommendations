@@ -7,12 +7,6 @@ namespace NineRecommendations.Core.Persistence
     {
         private ConcurrentDictionary<Guid, IQuestionnaire> Questionnaires { get; } = new();
 
-        public Task DeleteAsync(Guid id)
-        {
-            Questionnaires.TryRemove(id, out _);
-            return Task.CompletedTask;
-        }
-
         public Task<IQuestionnaire?> LoadAsync(Guid id)
         {
             Questionnaires.TryGetValue(id, out var questionnaire);

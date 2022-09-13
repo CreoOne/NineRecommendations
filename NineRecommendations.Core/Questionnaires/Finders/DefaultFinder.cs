@@ -7,8 +7,15 @@ namespace NineRecommendations.Core.Questionnaires.Finders
     {
         private IDictionary<Guid, IQuestion> Questions { get; } = new Dictionary<Guid, IQuestion>();
         private IDictionary<Guid, IAnswer> Answers { get; } = new Dictionary<Guid, IAnswer>();
+        private IQuestion FirstQuestion { get; set; }
 
-        public void AddQuestionsByTraversal(IQuestion question)
+        public DefaultFinder(IQuestion firstQuestion)
+        {
+            FirstQuestion = firstQuestion;
+            AddQuestionsAndAnswersByTraversal(firstQuestion);
+        }
+
+        private void AddQuestionsAndAnswersByTraversal(IQuestion question)
         {
             Questions.TryAdd(question.Id, question);
 
@@ -17,7 +24,7 @@ namespace NineRecommendations.Core.Questionnaires.Finders
                 Answers.TryAdd(answer.Id, answer);
 
                 if (answer is IPassTroughAnswer passTroughAnswer)
-                    AddQuestionsByTraversal(passTroughAnswer.GetNextQuestion());
+                    AddQuestionsAndAnswersByTraversal(passTroughAnswer.GetNextQuestion());
             }
         }
 
@@ -32,5 +39,7 @@ namespace NineRecommendations.Core.Questionnaires.Finders
             Answers.TryGetValue(id, out IAnswer? found);
             return found;
         }
+
+        public IQuestion GetFirstQuestion() => FirstQuestion;
     }
 }

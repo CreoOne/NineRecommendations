@@ -6,6 +6,5 @@ namespace NineRecommendations.Core.Persistence
     {
         Task SaveAsync(IQuestionnaire questionnaire);
         Task<IQuestionnaire?> LoadAsync(Guid id);
-        Task DeleteAsync(Guid id);
     }
 }
