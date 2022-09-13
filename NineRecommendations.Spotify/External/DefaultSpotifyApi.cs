@@ -20,48 +20,19 @@ namespace NineRecommendations.Spotify.External
         public async Task<RootObject?> CallSearchAsync(SearchOptions searchOptions)
         {
             var httpClient = await CreateHttpClient();
-            var uri = await ConstructUriAsync(searchOptions);
+            var uri = await new SearchQueryBuilder()
+                .AddType("track")
+                .SetGenre(searchOptions.Genre)
+                .SetYears(searchOptions.Year)
+                .SetTag(searchOptions.Unique)
+                .Build();
+                
             var result = await httpClient.GetAsync(uri);
 
             var text = await result.Content.ReadAsStringAsync();
 
             using var content = await result.Content.ReadAsStreamAsync();
             return await JsonSerializer.DeserializeAsync<RootObject>(content);
-        }
-
-        private async Task<string> ConstructUriAsync(SearchOptions searchOptions)
-        {
-            var uri = new StringBuilder("/v1/search?");
-            var parameters = new Dictionary<string, string> 
-            {
-                { "type", "track" }
-            };
-
-            var query = new StringBuilder();
-            query.Append("genre:");
-            query.Append(searchOptions.Genre);
-            query.Append(' ');
-
-            query.Append("year:");
-            query.Append(searchOptions.Year.Start);
-            query.Append('-');
-            query.Append(searchOptions.Year.End);
-
-            if(!string.IsNullOrEmpty(searchOptions.Unique))
-            {
-                query.Append(' ');
-                query.Append("tag:");
-                query.Append(searchOptions.Unique);
-            }
-
-            var queryString = query.ToString();
-
-            if (!string.IsNullOrEmpty(queryString))
-                parameters.Add("q", queryString);
-
-            var formUrlEncoded = new FormUrlEncodedContent(parameters);
-            uri.Append(await formUrlEncoded.ReadAsStringAsync());
-            return uri.ToString();
         }
 
         private async Task<HttpClient> CreateHttpClient()

@@ -9,7 +9,7 @@
 
 <div class="container mb-3">
     <form method="post" asp-action="Refine" asp-route-id="@Model.Id">
-        <input type="submit" class="btn btn-dark" value="Refine" title="Sorry not available right now"/>
+        <input type="submit" class="btn btn-dark" value="Refine" />
     </form>
 </div>
 
@@ -38,7 +38,7 @@
             @recommendation.Authors
         </div>
         <div class="col-2 bg-light m-1 p-3">
-            @recommendation.Duration.ToString(@"%m\:%s")
+            @recommendation.Duration.ToString(@"%m\:ss")
         </div>
         <div class="col-2 bg-light m-1 p-3">
             <a href="@recommendation.Uri">on Spotify</a>
