@@ -50,5 +50,23 @@ namespace NineRecommendations.Spotify.Questionnaries
             new("C8A61B93-DECA-4033-A847-2A7DE751E7EB"),
             "Old School"
         );
+
+        public static ILastAnswer Modern => new DefaultLastAnswer
+        (
+            new("1A899E1B-F5B9-4E06-801F-25527FC0C4DD"),
+            "Modern"
+        );
+
+        public static ILastAnswer VeryFresh => new DefaultLastAnswer
+        (
+            new("A1C799F9-074C-438B-99B4-A36C1C19BAC3"),
+            "Very fresh (weeks old)"
+        );
+
+        public static ILastAnswer Unpopular => new DefaultLastAnswer
+        (
+            new("6662249C-25BB-4AE0-AA64-D91019245AAF"),
+            "Unpopular"
+        );
     }
 }

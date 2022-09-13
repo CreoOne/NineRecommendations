@@ -30,6 +30,24 @@ namespace NineRecommendations.Core.Questionnaires
             return questionnaireId;
         }
 
+        public async Task<Guid> RefineQuestionnaireAsync(Guid recommendationId)
+        {
+            var questionnaireId = Guid.NewGuid();
+            var newQuestionnaire = new DefaultQuestionnaire(questionnaireId);
+
+            var previousRecommendation = await RecommendationRepository.GetRecommendationByIdAsync(recommendationId);
+
+            if(previousRecommendation == null)
+                // missing error handling - right now it will just answer refine question and cause futher errors
+                return questionnaireId;
+
+            foreach (var qnaPair in previousRecommendation.Questionnaire.GetQuestionAnswerPairs())
+                newQuestionnaire.AddAnswer(qnaPair.Key, qnaPair.Value);
+
+            await QuestionnaireRepository.SaveAsync(newQuestionnaire);
+            return questionnaireId;
+        }
+
         public IQuestion? GetQuestionById(Guid questionId) => Finder.FindQuestionById(questionId);
 
         public async Task<AnswerProcessingResult> ProcessAnswerAsync(Guid questionnaireId, Guid questionId, Guid answerId)
@@ -73,5 +91,7 @@ namespace NineRecommendations.Core.Questionnaires
         public static AnswerProcessingResult CreateInformationResult(string message) => new(new AnswerProcessingNotice(NoticeSeverityEnum.Information, message));
 
         public Guid GetFirstQuestionId() => Finder.GetFirstQuestion().Id;
+
+        public Guid GetRefineQuestionId() => Finder.GetRefineQuestion().Id;
     }
 }

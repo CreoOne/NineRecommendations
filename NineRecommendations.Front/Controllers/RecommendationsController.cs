@@ -44,5 +44,12 @@ namespace NineRecommendations.Front.Controllers
             QuestionnaireIdStorage.Set(HttpContext.Session, questionnaireId);
             return RedirectToAction(nameof(QuestionsController.Answers), "Questions", new { id = QuestionnaireManipulator.GetFirstQuestionId() });
         }
+
+        public async Task<IActionResult> Refine(Guid id)
+        {
+            var questionnaireId = await QuestionnaireManipulator.RefineQuestionnaireAsync(id);
+            QuestionnaireIdStorage.Set(HttpContext.Session, questionnaireId);
+            return RedirectToAction(nameof(QuestionsController.Answers), "Questions", new { id = QuestionnaireManipulator.GetRefineQuestionId() });
+        }
     }
 }

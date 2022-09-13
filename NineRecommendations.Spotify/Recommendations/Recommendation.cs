@@ -13,6 +13,7 @@ namespace NineRecommendations.Spotify.Recommendations
     {
         public Guid Id { get; }
         public string Name { get; }
+        public IQuestionnaire Questionnaire { get; }
         public RecommendationStatus Status { get; private set; } = RecommendationStatus.Processing;
         public DateTime Created { get; } = DateTime.UtcNow;
         public IEnumerable<Track> Recommendations { get; private set; } = Enumerable.Empty<Track>();
@@ -21,6 +22,7 @@ namespace NineRecommendations.Spotify.Recommendations
         {
             Id = id;
             Name = name;
+            Questionnaire = questionnaire;
             Task.Factory.StartNew(async () => await ProcessAsync(questionnaire, spotifyApi).ConfigureAwait(false));
         }
 
@@ -31,7 +33,8 @@ namespace NineRecommendations.Spotify.Recommendations
                 var searchOptions = new SearchOptions
                 {
                     Genre = SelectGenre(questionnaire),
-                    Year = SelectTime(questionnaire)
+                    Year = SelectTime(questionnaire),
+                    Unique = SelectUniqueness(questionnaire),
                 };
 
                 // needs more than one search to give more diverse recommendations
@@ -52,6 +55,22 @@ namespace NineRecommendations.Spotify.Recommendations
             {
                 Status = RecommendationStatus.Error;
             }
+        }
+
+        private static string? SelectUniqueness(IQuestionnaire questionnaire)
+        {
+            var answerId = GetQuestionAnswerId(questionnaire, Questions.Uniqueness);
+
+            if (answerId == null)
+                return null;
+
+            if (answerId == Answers.Unpopular.Id)
+                return "hipster";
+
+            if (answerId == Answers.VeryFresh.Id)
+                return "new";
+
+            return null;
         }
 
         private static string? SelectGenre(IQuestionnaire questionnaire)
@@ -82,6 +101,9 @@ namespace NineRecommendations.Spotify.Recommendations
 
             if (answerId == Answers.OldSchool.Id)
                 return new Range(1970, 1990);
+
+            if (answerId == Answers.Modern.Id)
+                return new Range(DateTime.UtcNow.AddYears(-5).Year, DateTime.UtcNow.Year);
 
             return new Range(1900, DateTime.UtcNow.Year);
         }

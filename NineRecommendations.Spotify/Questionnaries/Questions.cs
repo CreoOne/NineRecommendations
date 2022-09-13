@@ -18,5 +18,12 @@ namespace NineRecommendations.Spotify.Questionnaries
             "How do You like Your music?",
             new[] { Answers.Timeless, Answers.OldSchool }
         );
+
+        public static IQuestion Uniqueness => new DefaultQuestion
+        (
+            new("0D0231C6-9B45-42A3-B4AF-7A457AD42806"),
+            "How would You like it to be?",
+            new[] { Answers.VeryFresh, Answers.Unpopular }
+        );
     }
 }

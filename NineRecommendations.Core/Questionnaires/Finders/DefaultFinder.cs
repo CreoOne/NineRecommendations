@@ -8,11 +8,15 @@ namespace NineRecommendations.Core.Questionnaires.Finders
         private IDictionary<Guid, IQuestion> Questions { get; } = new Dictionary<Guid, IQuestion>();
         private IDictionary<Guid, IAnswer> Answers { get; } = new Dictionary<Guid, IAnswer>();
         private IQuestion FirstQuestion { get; set; }
+        private IQuestion RefineQuestion { get; set; }
 
-        public DefaultFinder(IQuestion firstQuestion)
+        public DefaultFinder(IQuestion firstQuestion, IQuestion refineQuestion)
         {
             FirstQuestion = firstQuestion;
             AddQuestionsAndAnswersByTraversal(firstQuestion);
+
+            RefineQuestion = refineQuestion;
+            AddQuestionsAndAnswersByTraversal(refineQuestion);
         }
 
         private void AddQuestionsAndAnswersByTraversal(IQuestion question)
@@ -41,5 +45,7 @@ namespace NineRecommendations.Core.Questionnaires.Finders
         }
 
         public IQuestion GetFirstQuestion() => FirstQuestion;
+
+        public IQuestion GetRefineQuestion() => RefineQuestion;
     }
 }

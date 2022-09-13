@@ -47,6 +47,13 @@ namespace NineRecommendations.Spotify.External
             query.Append('-');
             query.Append(searchOptions.Year.End);
 
+            if(!string.IsNullOrEmpty(searchOptions.Unique))
+            {
+                query.Append(' ');
+                query.Append("tag:");
+                query.Append(searchOptions.Unique);
+            }
+
             var queryString = query.ToString();
 
             if (!string.IsNullOrEmpty(queryString))

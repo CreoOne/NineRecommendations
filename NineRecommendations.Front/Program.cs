@@ -1,4 +1,5 @@
 using NineRecommendations.Core.Extensions;
+using NineRecommendations.Core.Questionnaires.Questions;
 using NineRecommendations.Spotify.Extensions;
 using NineRecommendations.Spotify.External;
 using NineRecommendations.Spotify.Questionnaries;
@@ -23,7 +24,7 @@ namespace NineRecommendations.Front
             builder.Services.AddHttpClient();
 
             builder.Services.AddSpotifyProvider(builder.Configuration);
-            builder.Services.AddEntryQuestion(Answers.Spotify);
+            builder.Services.AddEntryQuestion(new EntryQuestion(Answers.Spotify), Questions.Uniqueness);
             builder.Services.AddQuestionnairesAndRecommendationsPersistence();
             builder.Services.AddRecommendationBuilder((serviceProvider, recommendationBuilder) =>
             {
@@ -38,6 +39,7 @@ namespace NineRecommendations.Front
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
+                // this needs to be defined correctly, currently there is no such path
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();

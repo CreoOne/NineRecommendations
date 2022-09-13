@@ -8,5 +8,6 @@ namespace NineRecommendations.Core.Questionnaires.Finders
         IQuestion? FindQuestionById(Guid id);
         IAnswer? FindAnswerById(Guid id);
         IQuestion GetFirstQuestion();
+        IQuestion GetRefineQuestion();
     }
 }

@@ -40,9 +40,9 @@ namespace NineRecommendations.Core.Extensions
         /// <summary>
         /// Adds entry question and related propagetes trough every possible answer to discover all nodes
         /// </summary>
-        public static IServiceCollection AddEntryQuestion(this IServiceCollection services, params IAnswer[] answers)
+        public static IServiceCollection AddEntryQuestion(this IServiceCollection services, IQuestion entryQuestion, IQuestion refineQuestion)
         {
-            services.AddSingleton<IFinder, DefaultFinder>(serviceProvider => new DefaultFinder(new EntryQuestion(answers)));
+            services.AddSingleton<IFinder, DefaultFinder>(serviceProvider => new DefaultFinder(entryQuestion, refineQuestion));
             return services;
         }
     }

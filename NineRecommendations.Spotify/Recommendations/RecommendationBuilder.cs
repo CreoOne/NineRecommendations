@@ -19,7 +19,9 @@ namespace NineRecommendations.Spotify.Recommendations
         private static readonly HashSet<Guid> LastAnswers = new()
         {
             Answers.Timeless.Id,
-            Answers.OldSchool.Id
+            Answers.OldSchool.Id,
+            Answers.Unpopular.Id,
+            Answers.VeryFresh.Id
         };
 
         public IRecommendation? BuildRecommendation(IAnswer answer, IFinder finder, IQuestionnaire questionnaire)

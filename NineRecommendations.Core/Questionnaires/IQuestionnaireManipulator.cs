@@ -8,6 +8,8 @@ namespace NineRecommendations.Core.Questionnaires
         IQuestion? GetQuestionById(Guid questionId);
         Task<AnswerProcessingResult> ProcessAnswerAsync(Guid questionnaireId, Guid questionId, Guid answerId);
         Task<Guid> StartNewQuestionnaireAsync();
+        Task<Guid> RefineQuestionnaireAsync(Guid recommendationId);
         Guid GetFirstQuestionId();
+        Guid GetRefineQuestionId();
     }
 }

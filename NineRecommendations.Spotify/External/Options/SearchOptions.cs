@@ -4,5 +4,6 @@
     {
         public string? Genre { get; set; }
         public Range Year { get; set; } = new Range(1900, DateTime.UtcNow.Year);
+        public string? Unique { get; set; }
     }
 }
