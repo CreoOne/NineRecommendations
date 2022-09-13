@@ -8,6 +8,9 @@ namespace NineRecommendations.Spotify.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds Spotify Api related dependencies
+        /// </summary>
         public static IServiceCollection AddSpotifyProvider(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<SpotifyOptions>(configuration.GetSection(nameof(SpotifyOptions)));

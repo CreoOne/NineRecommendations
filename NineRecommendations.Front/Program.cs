@@ -1,6 +1,8 @@
 using NineRecommendations.Core.Extensions;
-using NineRecommendations.Front.Extensions;
 using NineRecommendations.Spotify.Extensions;
+using NineRecommendations.Spotify.External;
+using NineRecommendations.Spotify.Questionnaries;
+using NineRecommendations.Spotify.Recommendations;
 
 namespace NineRecommendations.Front
 {
@@ -21,9 +23,13 @@ namespace NineRecommendations.Front
             builder.Services.AddHttpClient();
 
             builder.Services.AddSpotifyProvider(builder.Configuration);
-            builder.Services.AddEntryQuestion();
+            builder.Services.AddEntryQuestion(Answers.Spotify);
             builder.Services.AddQuestionnairesAndRecommendationsPersistence();
-            builder.Services.AddRecommendationBuilder();
+            builder.Services.AddRecommendationBuilder((serviceProvider, recommendationBuilder) =>
+            {
+                var spotifyApi = serviceProvider.GetRequiredService<ISpotifyApi>();
+                recommendationBuilder.AddRecommendationBuilder(new RecommendationBuilder(spotifyApi));
+            });
 
             builder.Services.AddControllersWithViews();
 
