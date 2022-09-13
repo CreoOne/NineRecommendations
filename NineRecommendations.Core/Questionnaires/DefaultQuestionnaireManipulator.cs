@@ -4,11 +4,6 @@ using NineRecommendations.Core.Questionnaires.Finders;
 using NineRecommendations.Core.Questionnaires.Primitives;
 using NineRecommendations.Core.Questionnaires.Questions;
 using NineRecommendations.Core.Recommendations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NineRecommendations.Core.Questionnaires
 {

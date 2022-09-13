@@ -1,6 +1,4 @@
 ﻿using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Core.Questionnaires.Answers;
-using NineRecommendations.Core.Questionnaires.Finders;
 using NineRecommendations.Core.Questionnaires.Questions;
 using NineRecommendations.Core.Recommendations;
 using NineRecommendations.Core.Recommendations.Primitives;

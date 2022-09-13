@@ -1,11 +1,6 @@
-using Microsoft.Extensions.Options;
-using NineRecommendations.Core.Persistence;
-using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Core.Questionnaires.Finders;
-using NineRecommendations.Core.Questionnaires.Questions;
-using NineRecommendations.Core.Recommendations;
-using NineRecommendations.Spotify.External;
-using NineRecommendations.Spotify.External.Options;
+using NineRecommendations.Core.Extensions;
+using NineRecommendations.Front.Extensions;
+using NineRecommendations.Spotify.Extensions;
 
 namespace NineRecommendations.Front
 {
@@ -17,7 +12,6 @@ namespace NineRecommendations.Front
 
             // Add services to the container.
 
-            builder.Services.Configure<SpotifyOptions>(builder.Configuration.GetSection(nameof(SpotifyOptions)));
             builder.Services.AddSession(options =>
             {
                 options.Cookie.Name = ".Que";
@@ -25,25 +19,12 @@ namespace NineRecommendations.Front
             });
 
             builder.Services.AddHttpClient();
-            builder.Services.AddSingleton<IFinder, DefaultFinder>(serviceProvider => new DefaultFinder(new EntryQuestion(Spotify.Questionnaries.Answers.Spotify)));
-            builder.Services.AddSingleton<IQuestionnaireRepository, InMemoryQuestionnaireRepository>();
-            builder.Services.AddSingleton<IRecommendationRepository, InMemoryRecommendationRepository>();
-            builder.Services.AddSingleton<ISpotifyApi>(serviceProvider =>
-            {
-                var options = serviceProvider.GetRequiredService<IOptions<SpotifyOptions>>().Value;
-                var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-                return new DefaultSpotifyApi(httpClientFactory, options);
-            });
-            builder.Services.AddSingleton<IRecommendationBuilder>(serviceProvider =>
-            {
-                var recommendationBuilder = new DefaultRecommendationBuilder();
 
-                var spotifyApi = serviceProvider.GetRequiredService<ISpotifyApi>();
-                recommendationBuilder.AddRecommendationBuilder(new Spotify.Recommendations.RecommendationBuilder(spotifyApi));
+            builder.Services.AddSpotifyProvider(builder.Configuration);
+            builder.Services.AddEntryQuestion();
+            builder.Services.AddQuestionnairesAndRecommendationsPersistence();
+            builder.Services.AddRecommendationBuilder();
 
-                return recommendationBuilder;
-            });
-            builder.Services.AddSingleton<IQuestionnaireManipulator, DefaultQuestionnaireManipulator>();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
