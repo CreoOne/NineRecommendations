@@ -1,7 +1,6 @@
 ## Milestone - Critical functionalities
 - Handling of _401 Unauthorized_ and _429 Limits exceeded_ HTTP status codes for Spotify API
 - Persistent data storage
-- Questions with multiple choice answers
 - Error handling
 - More service observability (logging, tracing and metrics)
 
@@ -10,6 +9,7 @@
 - User accounts
 - Non public recommendations
 - Further simplification of Questions and Answers implementation
+- Questions with multiple choice answers
 
 ## Milestone - Going big
 - Distributed processing of recommendations for high load traffic
