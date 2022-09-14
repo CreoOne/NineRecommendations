@@ -2,6 +2,8 @@
 
 9Recommendations is simple music recommendation app.
 
+It always gives nine recommendations that are based on answers given in the series of questions. Chosen architecture should help with expansion and replacement of functionalities.
+
 ## Goals
 
 - Minimal configuration
@@ -16,22 +18,7 @@
 
 ## Running
 
-### Single app mode
-
-Using sources:
-
-1. In the repository root
-2. Open the terminal of your choice
-3. `dotnet run --project ./NineRecommendations.Front/NineRecommendations.Front.csproj`
-
-Using executable:
-
-1. In the executable location
-2. `dotnet .\NineRecommendations.Front.dll`
-
-### Distributed mode
-
-See [ROADMAP.md](./ROADMAP.md)
+See [DOCS.md](./DOCS.md)
 
 ## Documentation
 

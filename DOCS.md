@@ -20,6 +20,54 @@ additionally:
 
 - NineRecommendations.*.UnitTests - Contains all unit and maybe some integration tests.
 
+&nbsp;
+
+---
+
+&nbsp;
+
+## Running application
+
+### Single app mode
+
+Before start:
+
+- Define Spotify API secrets in configuration, for example in [secrets.json](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows) (recommended) or in [appsettings.json](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0#appsettingsjson)
+
+```json
+{
+    ...
+
+    "SpotifyOptions": {
+        "ClientId": "yourClientId",
+        "ClientSecret": "yourSecret"
+    }
+}
+```
+
+Using sources:
+
+1. In the repository root
+2. Open the terminal of your choice
+3. `dotnet run --project ./NineRecommendations.Front/NineRecommendations.Front.csproj`
+
+Using executable:
+
+1. In the executable location
+2. `dotnet .\NineRecommendations.Front.dll`
+
+### Distributed mode
+
+_Not implemented_
+
+See [ROADMAP.md](./ROADMAP.md)
+
+&nbsp;
+
+---
+
+&nbsp;
+
 ## Simplified application flow
 
 1. Upon entering home page user is presented with list of all recommendations, handled by `RecommendationController`.
