@@ -9,12 +9,10 @@ namespace NineRecommendations.Front.Controllers
 {
     public class QuestionsController : Controller
     {
-        private ILogger<QuestionsController> Logger { get; }
         private IQuestionnaireManipulator QuestionnaireManipulator { get; }
 
-        public QuestionsController(ILogger<QuestionsController> logger, IQuestionnaireManipulator questionnaireManipulator)
+        public QuestionsController(IQuestionnaireManipulator questionnaireManipulator)
         {
-            Logger = logger;
             QuestionnaireManipulator = questionnaireManipulator;
         }
 
