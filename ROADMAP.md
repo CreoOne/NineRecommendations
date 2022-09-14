@@ -6,7 +6,7 @@
 - More service observability (logging, tracing and metrics)
 
 ## Milestone - User centered
-- Cross-pages success&failure notifications
+- ~~Cross-pages success&failure notifications~~
 - User accounts
 - Non public recommendations
 - Further simplification of Questions and Answers implementation
