@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NineRecommendations.Core.Questionnaires;
+using NineRecommendations.Core.Questionnaires.Primitives;
 using NineRecommendations.Front.Extensions;
 using NineRecommendations.Front.Helpers;
 using NineRecommendations.Front.Models;
@@ -24,16 +25,16 @@ namespace NineRecommendations.Front.Controllers
 
             if (questionnaireId == null)
             {
-                TempData.AddNotification(NotificationModel.CreateError("Questionnaire not found"));
-                return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+                AddErrorNotification("Questionnaire not found");
+                return RedirectToRecommendationsIndex();
             }
 
             var question = QuestionnaireManipulator.GetQuestionById(id);
 
             if (question == null)
             {
-                TempData.AddNotification(NotificationModel.CreateError("Question not found"));
-                return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+                AddErrorNotification("Question not found");
+                return RedirectToRecommendationsIndex();
             }
 
             return View(question.ToViewModel());
@@ -47,20 +48,29 @@ namespace NineRecommendations.Front.Controllers
 
             if (!questionnaireId.HasValue)
             {
-                TempData.AddNotification(NotificationModel.CreateError("Questionnaire not found"));
-                return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+                AddErrorNotification("Questionnaire not found");
+                return RedirectToRecommendationsIndex();
             }
 
             var result = await QuestionnaireManipulator.ProcessAnswerAsync(questionnaireId.Value, id, model.Id);
 
             if(result.NextQuestionId.HasValue)
             {
-                TempData.AddNotifications(result.Notices.ToNotificationModels());
+                AddNotifications(result);
                 return RedirectToAction(nameof(Ask), new { id = result.NextQuestionId.Value });
             }
 
-            TempData.AddNotifications(result.Notices.ToNotificationModels());
-            return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+            AddNotifications(result);
+            return RedirectToRecommendationsIndex();
         }
+
+        private RedirectToActionResult RedirectToRecommendationsIndex()
+            => RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+
+        private void AddErrorNotification(string message)
+            => TempData.AddNotification(NotificationModel.CreateError(message));
+
+        private void AddNotifications(AnswerProcessingResult processingResult)
+            => TempData.AddNotifications(processingResult.Notices.ToNotificationModels());
     }
 }

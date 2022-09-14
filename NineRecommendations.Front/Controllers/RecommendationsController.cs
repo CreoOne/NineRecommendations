@@ -24,7 +24,11 @@ namespace NineRecommendations.Front.Controllers
         public async Task<IActionResult> Index()
         {
             var recommendations = await RecommendationRepository.ListAllRecommendationsAsync();
-            return View(recommendations.OrderByDescending(recommendations => recommendations.Created).ToViewModels());
+            var viewModels = recommendations
+                .OrderByDescending(recommendation => recommendation.Created)
+                .ToViewModels();
+
+            return View(viewModels);
         }
 
         [HttpGet("{controller}/{id}")]
@@ -34,7 +38,7 @@ namespace NineRecommendations.Front.Controllers
 
             if (recommendation == null)
             {
-                TempData.AddNotification(NotificationModel.CreateError("Recommendation not found"));
+                AddErrorNotification("Recommendation not found");
                 return RedirectToAction(nameof(Index));
             }
 
@@ -46,14 +50,20 @@ namespace NineRecommendations.Front.Controllers
         {
             var questionnaireId = await QuestionnaireManipulator.StartNewQuestionnaireAsync();
             QuestionnaireIdStorage.Set(HttpContext.Session, questionnaireId);
-            return RedirectToAction(nameof(QuestionsController.Ask), "Questions", new { id = QuestionnaireManipulator.GetFirstQuestionId() });
+            return RedirectToQuestionsAsk(QuestionnaireManipulator.GetFirstQuestionId());
         }
 
         public async Task<IActionResult> Refine(Guid id)
         {
             var questionnaireId = await QuestionnaireManipulator.RefineQuestionnaireAsync(id);
             QuestionnaireIdStorage.Set(HttpContext.Session, questionnaireId);
-            return RedirectToAction(nameof(QuestionsController.Ask), "Questions", new { id = QuestionnaireManipulator.GetRefineQuestionId() });
+            return RedirectToQuestionsAsk(QuestionnaireManipulator.GetRefineQuestionId());
         }
+
+        private RedirectToActionResult RedirectToQuestionsAsk(Guid questionId)
+            => RedirectToAction(nameof(QuestionsController.Ask), "Questions", new { id = questionId });
+
+        private void AddErrorNotification(string message)
+            => TempData.AddNotification(NotificationModel.CreateError(message));
     }
 }
