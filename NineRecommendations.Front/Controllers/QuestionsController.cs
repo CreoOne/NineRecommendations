@@ -23,13 +23,18 @@ namespace NineRecommendations.Front.Controllers
             var questionnaireId = QuestionnaireIdStorage.Get(HttpContext.Session);
 
             if (questionnaireId == null)
-                // needs to be extracted into separate method
+            {
+                TempData.AddNotification(NotificationModel.CreateError("Questionnaire not found"));
                 return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+            }
 
             var question = QuestionnaireManipulator.GetQuestionById(id);
 
             if (question == null)
+            {
+                TempData.AddNotification(NotificationModel.CreateError("Question not found"));
                 return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+            }
 
             return View(question.ToViewModel());
         }
@@ -41,17 +46,20 @@ namespace NineRecommendations.Front.Controllers
             var questionnaireId = QuestionnaireIdStorage.Get(HttpContext.Session);
 
             if (!questionnaireId.HasValue)
+            {
+                TempData.AddNotification(NotificationModel.CreateError("Questionnaire not found"));
                 return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
+            }
 
             var result = await QuestionnaireManipulator.ProcessAnswerAsync(questionnaireId.Value, id, model.Id);
 
             if(result.NextQuestionId.HasValue)
             {
-                // needs info & warnings to be forwarded to ViewModel
+                TempData.AddNotifications(result.Notices.ToNotificationModels());
                 return RedirectToAction(nameof(Ask), new { id = result.NextQuestionId.Value });
             }
 
-            // needs errors to be forwarded to ViewModel
+            TempData.AddNotifications(result.Notices.ToNotificationModels());
             return RedirectToAction(nameof(RecommendationsController.Index), "Recommendations");
         }
     }

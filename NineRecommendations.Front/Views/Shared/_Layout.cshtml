@@ -1,4 +1,15 @@
-﻿<!DOCTYPE html>
+﻿@using NineRecommendations.Front.Extensions
+@{
+    // move this logic into its own Razor View Component
+    var notifications = TempData.GetNotifications();
+    string NotificationSeverityClass(NotificationModelEnum severity) => severity switch
+    {
+        NotificationModelEnum.Error => "bg-danger",
+        NotificationModelEnum.Warning => "bg-warning",
+        _ => "bg-success",
+    };
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,6 +38,17 @@
             </div>
         </nav>
     </header>
+    @if(notifications.Any())
+    {
+        <div class="container mb-3">
+            @foreach(var notification in notifications)
+        {
+                <div class="container @NotificationSeverityClass(notification.Severity) text-light text-center p-2 mb-1">
+                    @notification.Message
+                </div>
+        }
+        </div>
+    }
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

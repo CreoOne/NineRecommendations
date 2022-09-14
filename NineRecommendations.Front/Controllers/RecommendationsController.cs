@@ -3,6 +3,7 @@ using NineRecommendations.Core.Persistence;
 using NineRecommendations.Core.Questionnaires;
 using NineRecommendations.Front.Extensions;
 using NineRecommendations.Front.Helpers;
+using NineRecommendations.Front.Models;
 
 namespace NineRecommendations.Front.Controllers
 {
@@ -32,7 +33,10 @@ namespace NineRecommendations.Front.Controllers
             var recommendation = await RecommendationRepository.GetRecommendationByIdAsync(id);
 
             if (recommendation == null)
-                return RedirectToAction(nameof(Index)); // // needs errors to be forwarded to ViewModel
+            {
+                TempData.AddNotification(NotificationModel.CreateError("Recommendation not found"));
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(recommendation.ToViewModel());
         }
