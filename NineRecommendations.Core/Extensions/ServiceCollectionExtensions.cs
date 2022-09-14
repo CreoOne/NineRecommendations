@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NineRecommendations.Core.Persistence;
 using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Core.Questionnaires.Answers;
 using NineRecommendations.Core.Questionnaires.Finders;
 using NineRecommendations.Core.Questionnaires.Questions;
 using NineRecommendations.Core.Recommendations;

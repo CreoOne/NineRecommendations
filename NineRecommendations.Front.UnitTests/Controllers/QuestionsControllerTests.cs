@@ -2,15 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NineRecommendations.Core.Questionnaires;
-using NineRecommendations.Core.Questionnaires.Answers;
-using NineRecommendations.Core.Questionnaires.Questions;
 using NineRecommendations.Front.Controllers;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NineRecommendations.Front.UnitTests.Controllers
 {
