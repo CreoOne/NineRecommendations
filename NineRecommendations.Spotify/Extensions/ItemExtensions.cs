@@ -12,7 +12,7 @@ namespace NineRecommendations.Spotify.Extensions
         {
             var artists = string.Join(", ", item.Artists.Select(artist => artist.Name));
             var duration = TimeSpan.FromMilliseconds(item.DurationMs);
-            var uri = new Uri(item.ExternalUrls.Spotify);
+            var uri = string.IsNullOrEmpty(item.ExternalUrls.Spotify) ? null : new Uri(item.ExternalUrls.Spotify);
 
             return new Track(item.Name, artists, duration, uri);
         }
