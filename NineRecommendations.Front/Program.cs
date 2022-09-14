@@ -25,7 +25,7 @@ namespace NineRecommendations.Front
 
             builder.Services.AddSpotifyProvider(builder.Configuration);
             builder.Services.AddEntryQuestion(new EntryQuestion(Answers.Spotify), Questions.Uniqueness);
-            builder.Services.AddQuestionnairesAndRecommendationsPersistence();
+            builder.Services.AddPersistence();
             builder.Services.AddRecommendationBuilder((serviceProvider, recommendationBuilder) =>
             {
                 var spotifyApi = serviceProvider.GetRequiredService<ISpotifyApi>();

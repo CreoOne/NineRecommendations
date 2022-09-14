@@ -1,6 +1,7 @@
 ## Milestone - Critical functionalities
 - Handling of _401 Unauthorized_ and _429 Too many requests_ HTTP status codes for Spotify API
 - Retry, Circuit Breaker, Timeout, Bulkhead Isolation, and Fallback
+- Simplify addition of new music recommendation provider
 - Persistent data storage
 - Error handling
 - More service observability (logging, tracing and metrics)
@@ -14,4 +15,4 @@
 
 ## Milestone - Going big
 - Distributed processing of recommendations for high load traffic
-- E2E and Smoke testing of deployment-ready service in infrastructure
+- E2E, Load, Spike and Smoke testing of deployment-ready service in infrastructure

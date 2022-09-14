@@ -13,7 +13,7 @@ namespace NineRecommendations.Core.Extensions
         /// <summary>
         /// Adds persistance layer and manipulation related dependencies
         /// </summary>
-        public static IServiceCollection AddQuestionnairesAndRecommendationsPersistence(this IServiceCollection services)
+        public static IServiceCollection AddPersistence(this IServiceCollection services)
         {
             services.AddSingleton<IQuestionnaireRepository, InMemoryQuestionnaireRepository>();
             services.AddSingleton<IRecommendationRepository, InMemoryRecommendationRepository>();

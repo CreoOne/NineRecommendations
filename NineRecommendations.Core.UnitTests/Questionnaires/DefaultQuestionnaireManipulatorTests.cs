@@ -41,7 +41,7 @@ namespace NineRecommendations.Core.UnitTests.Questionnaires
             // arrange
 
             var expected = Guid.NewGuid();
-            var possibleAnswers = Array.Empty<IAnswer>(); // doent play any role in this case
+            var possibleAnswers = Array.Empty<IAnswer>(); // doesnt play any role in this case
             var finder = Substitute.For<IFinder>();
             finder.FindQuestionById(Arg.Any<Guid>()).Returns(new DefaultQuestion(Guid.NewGuid(), "Question?", possibleAnswers));
             finder.FindAnswerById(Arg.Any<Guid>()).Returns(new DefaultPassTroughAnswer(Guid.NewGuid(), "Answer.", new DefaultQuestion(expected, "NextQuestion?", possibleAnswers)));
