@@ -5,6 +5,7 @@
 - Persistent data storage
 - Error handling
 - More service observability (logging, tracing and metrics)
+- Fill unit tests coverage of critical functionality
 
 ## Milestone - User centered
 - ~~Cross-pages success&failure notifications~~
